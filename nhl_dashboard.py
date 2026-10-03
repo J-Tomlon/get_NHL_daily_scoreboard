@@ -167,6 +167,7 @@ h1{margin:0;font-size:2rem;font-weight:700}
 .row{display:flex;align-items:baseline;gap:10px}
 .team{all:unset;cursor:pointer;font-size:1.9rem;font-weight:700;min-width:3.4ch}
 .team:focus-visible{outline:2px solid var(--fav);outline-offset:2px}
+.logo{width:2.4rem;height:2.4rem;object-fit:contain;flex:none;align-self:center}
 .sog{flex:1;color:var(--mute)}
 .score{font-size:2.6rem;font-weight:700;font-variant-numeric:tabular-nums}
 .goals{margin:10px 0 0;padding:8px 0 0;border-top:1px solid var(--line);list-style:none;font-size:.95rem}
@@ -188,10 +189,16 @@ let last = null;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const isFav = g => fav && (g.away.abbrev === fav || g.home.abbrev === fav);
 
+const CDN = "https://assets.nhle.com/logos/nhl/svg/";
+function logo(abbrev) {
+  const a = encodeURIComponent(abbrev);
+  return `<picture><source media="(prefers-color-scheme: dark)" srcset="${CDN}${a}_dark.svg"><img class="logo" src="${CDN}${a}_light.svg" alt="" onerror="this.style.visibility='hidden'"></picture>`;
+}
+
 function teamRow(t, kind) {
   const score = kind === "scheduled" ? "–" : t.score;
   const shots = kind === "scheduled" ? "" : t.sog + " shots";
-  return `<div class="row"><button class="team" data-team="${esc(t.abbrev)}">${esc(t.abbrev)}</button><span class="sog">${shots}</span><span class="score">${score}</span></div>`;
+  return `<div class="row">${logo(t.abbrev)}<button class="team" data-team="${esc(t.abbrev)}">${esc(t.abbrev)}</button><span class="sog">${shots}</span><span class="score">${score}</span></div>`;
 }
 
 function goalList(goals) {

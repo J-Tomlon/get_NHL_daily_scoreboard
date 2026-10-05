@@ -12,7 +12,6 @@ client = NHLClient()
 # Stores goals we've already seen
 goal_history = {}
 
-
 def build_dashboard():
 
     scores = client.game_center.daily_scores()
